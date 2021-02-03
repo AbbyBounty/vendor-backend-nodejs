@@ -8,38 +8,9 @@ const mailer=require('../../mailer')
 
 const router = express.Router()
 
-
-// ----------------------------------------------------
-// GET
-// ----------------------------------------------------
-
-/**
- * @swagger
- *
- * /admin/profile:
- *   get:
- *     description: For getting administrator profile
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: successful message
- */
-// router.get('/profile', (request, response) => {
-//   const statement = `select firstName, lastName, email, phone from admin where id = ${request.userId}`
-//   db.query(statement, (error, admins) => {
-//     if (error) {
-//       response.send({status: 'error', error: error})
-//     } else {
-//       if (admins.length == 0) {
-//         response.send({status: 'error', error: 'admin does not exist'})
-//       } else {
-//         const admin = admins[0]
-//         response.send(utils.createResult(error, admin))
-//       }
-//     }
-//   })
-// })
+////////////////////////////////////////////////////////////////
+///////////////////// GET Vendor //////////////////////////////
+////////////////////////////////////////////////////////////////
 
 router.get('/profile',(request,response) =>{
 
@@ -51,7 +22,7 @@ router.get('/profile',(request,response) =>{
   const data=jwt.verify(token,'1234567890abcdefghijklmnopqrstuvwxyz')
   const id=data['id']
   console.log(id)
-  const statement=`select ven_id, ven_first_name,ven_mobile,ven_proof,ven_shop_name, ven_last_name from vendor where ven_id=${id}`
+  const statement=`select ven_id,ven_address, ven_first_name,ven_mobile,ven_proof,ven_shop_name, ven_last_name from vendor where ven_id=${id}`
   // console.log(ven_id)
   // console.log("hello")
   db.query(statement,(error,users)=>{
@@ -78,37 +49,37 @@ router.get('/profile',(request,response) =>{
 
 
 
-router.get('/details/:id',(request,response) =>{
+// router.get('/details/:id',(request,response) =>{
 
-  const {id}= request.params
+//   const {id}= request.params
 
 
-  try{
+//   try{
  
  
-  const statement=`select ven_id, ven_first_name,ven_mobile,ven_shop_name, ven_last_name from vendor where ven_id=${id}`
-  // console.log(ven_id)
-  // console.log("hello")
-  db.query(statement,(error,users)=>{
+//   const statement=`select ven_id, ven_first_name,ven_mobile,ven_shop_name, ven_last_name from vendor where ven_id=${id}`
+//   // console.log(ven_id)
+//   // console.log("hello")
+//   db.query(statement,(error,users)=>{
   
-  if(users.length>0 )
-  {      const user=users[0];
+//   if(users.length>0 )
+//   {      const user=users[0];
  
-       response.send(utils.createResult(error,user))
-  }
-  else{
+//        response.send(utils.createResult(error,user))
+//   }
+//   else{
   
-      response.send(utils.createResult(`there is no user with this id`))
-  }
+//       response.send(utils.createResult(`there is no user with this id`))
+//   }
   
-  })
-  }  catch( ex){
-        response.status=401
-       response.send("you are not authorize to do it")
+//   })
+//   }  catch( ex){
+//         response.status=401
+//        response.send("you are not authorize to do it")
   
-  }
+//   }
   
-  })
+//   })
 // ----------------------------------------------------
 
 
@@ -150,6 +121,14 @@ router.get('/details/:id',(request,response) =>{
  *       200:
  *         description: successful message
  */
+
+
+
+
+ ////////////////////////////////////////////////////////////////
+///////////////////// Register Vendor //////////////////////////////
+////////////////////////////////////////////////////////////////
+
 router.post('/signup', (request, response) => {
   const { ven_address, ven_email,  ven_first_name,ven_last_name,ven_mobile,ven_password,ven_proof,ven_shop_name } = request.body
 
@@ -210,6 +189,12 @@ router.post('/signup', (request, response) => {
  *       200:
  *         description: successful message
  */
+
+
+////////////////////////////////////////////////////////////////
+/////////////////////  Vendor Login//////////////////////////////
+////////////////////////////////////////////////////////////////
+
 router.post('/signin', (request, response) => {
   const {ven_email, ven_password} = request.body
   const statement = `select ven_id, ven_first_name,ven_mobile,ven_proof,ven_shop_name, ven_last_name from vendor where ven_email = '${ven_email}' and ven_password = '${crypto.SHA256(ven_password)}'`
@@ -238,30 +223,38 @@ router.post('/signin', (request, response) => {
   
 })
 
-// ----------------------------------------------------
+
+////////////////////////////////////////////////////////////////
+///////////////////// Update Profile//////////////////////////////
+////////////////////////////////////////////////////////////////
 
 
-
-// ----------------------------------------------------
-// PUT
-// ----------------------------------------------------
-
-router.put('', (request, response) => {
-  response.send()
+router.put('/profile/',(request,response) => {
+  //const {id}= request.params
+  const token=request.headers['token']
+  
+        
+  const data=jwt.verify(token,'1234567890abcdefghijklmnopqrstuvwxyz')
+  const userId=data['id']
+  const { ven_address, ven_email,  ven_first_name,ven_last_name,ven_mobile,ven_proof,ven_shop_name } = request.body
+ // const{ u_address, u_email, u_first_name, u_last_name, u_mobile  }=request.body
+  
+  const statement= `update vendor set 
+  ven_address='${ven_address}',
+  ven_email='${ven_email}',
+  ven_first_name='${ven_first_name}',
+  ven_last_name='${ven_last_name}',
+  ven_mobile='${ven_mobile}',
+  ven_proof='${ven_proof}',
+  ven_shop_name='${ven_shop_name}'
+    where ven_id=${userId}  `
+                      
+  db.query(statement,(error,result)=>{
+  
+  response.send(utils.createResult(error,result))
+  
+  
+  })
+  
 })
-
-// ----------------------------------------------------
-
-
-
-// ----------------------------------------------------
-// DELETE
-// ----------------------------------------------------
-
-router.delete('', (request, response) => {
-  response.send()
-})
-
-// ----------------------------------------------------
-
 module.exports = router
