@@ -15,6 +15,19 @@ const router = express.Router()
 // ----------------------------------------------------
 // GET
 // ----------------------------------------------------
+
+/**
+ * @swagger
+ *
+ * /offer/:
+ *   get:
+ *     description: For getting offer
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 router.get('/', (request, response) => {
 
 
@@ -43,6 +56,18 @@ router.get('/', (request, response) => {
 
 })
 
+/**
+ * @swagger
+ *
+ * /offer/details:
+ *   get:
+ *     description: For getting offer details
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 
 router.get('/details/:id', (request, response) => {
   const {id} = request.params
@@ -82,6 +107,44 @@ router.get('/details/:id', (request, response) => {
 // ----------------------------------------------------
 // POST
 // ----------------------------------------------------
+
+/**
+ * @swagger
+ *
+ * /offer/create:
+ *   post:
+ *     description: For creating offer
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: ofr_code
+ *         description: offer code
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: ofr_discount
+ *         description: offer discount
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: ofr_name
+ *         description: offer name
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: ofr_validity
+ *         description: offer validity
+ *         in: formData
+ *         required: true
+ *         type: string
+ *      
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 router.post('/create', (request, response) => {
   const ven_id = request.userId
   const{ ofr_code, ofr_discount,ofr_name,ofr_validity } = request.body

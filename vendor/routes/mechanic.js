@@ -15,6 +15,18 @@ const router = express.Router()
 // ----------------------------------------------------
 // GET
 // ----------------------------------------------------
+/**
+ * @swagger
+ *
+ * /mechanic/:
+ *   get:
+ *     description: For getting mechanic
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 router.get('/', (request, response) => {
 
 
@@ -73,7 +85,18 @@ router.get('/', (request, response) => {
 
 // })
 
-
+/**
+ * @swagger
+ *
+ * /mechanic/details:
+ *   get:
+ *     description: For getting mechanic details
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 router.get('/details/:id', (request, response) => {
   const {id} = request.params
     const statement = `select *  from mechanic where mech_id=${id}`
@@ -109,6 +132,37 @@ router.get('/details/:id', (request, response) => {
 // ----------------------------------------------------
 // POST
 // ----------------------------------------------------
+/**
+ * @swagger
+ *
+ * /mechanic/create:
+ *   post:
+ *     description: For creating offer
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: mech_first_name
+ *         description: mechanic first name
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: mech_last_name
+ *         description: mechanic last name
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: mech_mobile
+ *         description: mechanic mobile number
+ *         in: formData
+ *         required: true
+ *         type: string
+ *      
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 router.post('/create', (request, response) => {
   const ven_id = request.userId
   const { mech_first_name, mech_last_name, mech_mobile } = request.body

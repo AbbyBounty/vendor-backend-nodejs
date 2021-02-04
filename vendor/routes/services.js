@@ -15,6 +15,18 @@ const router = express.Router()
 // ----------------------------------------------------
 // GET
 // ----------------------------------------------------
+/**
+ * @swagger
+ *
+ * /services/:
+ *   get:
+ *     description: For getting services
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 router.get('/', (request, response) => {
 
 
@@ -43,7 +55,18 @@ router.get('/', (request, response) => {
 
 })
 
-
+/**
+ * @swagger
+ *
+ * /services/details:
+ *   get:
+ *     description: For getting services details
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 
 router.get('/details/:id', (request, response) => {
   const {id} = request.params
@@ -83,6 +106,37 @@ router.get('/details/:id', (request, response) => {
 // ----------------------------------------------------
 // POST
 // ----------------------------------------------------
+/**
+ * @swagger
+ *
+ * /services/create:
+ *   post:
+ *     description: For creating offer
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: stv_name
+ *         description: service name
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: stv_price
+ *         description: service price
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: ven_id
+ *         description: vendor id
+ *         in: formData
+ *         required: true
+ *         type: string
+ *      
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 router.post('/create', (request, response) => {
   const ven_id = request.userId
   const { stv_name, stv_price} = request.body
