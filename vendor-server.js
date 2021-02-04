@@ -21,6 +21,8 @@ const offerRouter = require('./vendor/routes/offers')
 const orderRouter = require('./vendor/routes/order')
 
 
+
+
 const app = express()
 app.use(cors('*'))
 
@@ -31,23 +33,26 @@ app.use(morgan('combined'))
 const swaggerOptions = {
   definition: {
     info: {
-      title: 'Amazon Server (Admin Panel)',
+      title: 'Bike Clinic (Vendor Panel)',
       version: '1.0.0',
-      description: 'This is a Express server for amazon application'
+      description: 'This is a Express server for Bike Clinic application'
     }
   },
-  apis: ['./admin/routes/*.js']
+  apis: ['./vendor/routes/*.js']
 }
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// add a middleware for getting the id from token
+// add a middleware for getting the id from token 
 function getUserId(request, response, next) {
 
   if (request.url == '/vendor/signin' 
       || request.url == '/vendor/signup'
-      || request.url.startsWith('/product/image') ) {
+      || request.url.startsWith('/product/image')
+      || request.url.startsWith('/api-docs')
+     
+       ) {
     // do not check for token 
     next()
   } else {

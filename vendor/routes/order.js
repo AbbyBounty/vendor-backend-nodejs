@@ -15,7 +15,20 @@ const router = express.Router()
 // ----------------------------------------------------
 // GET
 // ----------------------------------------------------
-router.get('/', (request, response) => {
+/**
+ * @swagger
+ *
+ * /order/:
+ *   get:
+ *     description: For getting orders
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
+router.get('/', (request, response) => 
+{
 
 
   try {
@@ -45,6 +58,47 @@ router.get('/', (request, response) => {
 })
 
 
+/**
+ * @swagger
+ *
+ * /order/history:
+ *   get:
+ *     description: For getting order history
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
+router.get('/history', (request, response) => 
+{
+
+
+  try {
+
+   
+    
+    const statement =`select * from orders where active=0;`
+
+    db.query(statement, (error, orders) => {
+
+      if (orders.length > 0) {
+        const order = orders;
+        response.send(utils.createResult(error, order))
+      }
+      else {
+
+        response.send(utils.createError(`there is no order with this id`))
+      }
+
+    })
+  } catch (ex) {
+    response.status = 401
+    response.send("you are not authorize to do it")
+
+  }
+
+})
 
 // router.get('/:id', (request, response) => {
 
@@ -74,6 +128,18 @@ router.get('/', (request, response) => {
 
 // })
 
+/**
+ * @swagger
+ *
+ * /order/details:
+ *   get:
+ *     description: For getting order details
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 
 router.get('/details/:id', (request, response) => {
   const {id} = request.params
@@ -110,6 +176,38 @@ router.get('/details/:id', (request, response) => {
 // ----------------------------------------------------
 // POST
 // ----------------------------------------------------
+
+/**
+ * @swagger
+ *
+ * /offer/create:
+ *   post:
+ *     description: For creating offer
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: mech_first_name
+ *         description: mechanic first name
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: mech_last_name
+ *         description: mechanic last name
+ *         in: formData
+ *         required: true
+ *         type: string
+ * 
+ *       - name: mech_mobile
+ *         description: mechanic mobile number
+ *         in: formData
+ *         required: true
+ *         type: string
+ *      
+ *     responses:
+ *       200:
+ *         description: successful message
+ */
 router.post('/create', (request, response) => {
   const ven_id = request.userId
   const { mech_first_name, mech_last_name, mech_mobile } = request.body
