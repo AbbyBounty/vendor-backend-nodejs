@@ -196,7 +196,7 @@ router.post('/signup', (request, response) => {
     //   console.log(`error: ${error}`)
     //   result['status'] = 'error'
     //   result['error'] = error
-      response.send(util.sendError(error))
+      response.send(utils.createResult(error))
 
     } else {
 
